@@ -1,0 +1,38 @@
+Quill Audit CTF 
+VIP Bank
+
+note: think I forgot to add github repo in the first solution I submitted (for road closed), both solutions are in the same repo
+
+explanation: 
+
+the following check can be manipulated via selfdestruct():
+
+require(address(this).balance <= maxETH, "Cannot withdraw more than 0.5 ETH per transaction");
+
+steps:
+1. construct contract which self destructs when receiving ether, sending its funds to whichever address sends ether to it
+2. deposit and withdraw normally from the context of the self destruct contract, which causes the VIP_Bank to receive ether due to selfdestruct()
+3. try to deposit and withdraw normally from another address (fails)
+
+poc (using foundry): https://github.com/thejojochen/quill-ctf
+
+foundry output:
+Running 2 tests for test/VIP_BankSolution.t.sol:VIP_BankSolution
+[PASS] testFundsGetLocked() (gas: 124108)
+Logs:
+  balance after withdraw:  0
+  new bank balance: 1000000000000000000
+  address(this).balance always >= maxETH
+
+[PASS] testInitialConditions() (gas: 13800)
+Test result: ok. 2 passed; 0 failed; finished in 542.50µs
+
+mitigation: change require statement to:
+
+require(_amount <= maxETH, "Cannot withdraw more than 0.5 ETH per transaction");
+
+and track balance/check for max balance in deposit:
+
+uint256 public balance;
+if (balance + msg.value > maxETH) revert maxBalanceExceeded();
+balance += msg.value;
