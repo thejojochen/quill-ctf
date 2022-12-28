@@ -1,0 +1,26 @@
+Quill Audit CTF 
+Road Closed
+
+explanation: 
+
+the following functions lack access control: 
+
+function addToWhitelist(address addr) public
+
+steps:
+1. call addToWhitelist() from an external account (to bypass the !isContract() check) to change whitelistedMinters[YOUR_ADDRESS] to true
+2. call changeOnwer() from the same EOA, first check will pass due to first step
+3. call pwn() from the same EOA, third check will pass due to step 2
+
+poc (using foundry): 
+
+foundry output:
+Running 2 tests for test/RoadBlockSolution.t.sol:RoadBlockSolution
+[PASS] testInitialConditions() (gas: 11633)
+[PASS] testSolution() (gas: 40103)
+Test result: ok. 2 passed; 0 failed; finished in 1.92ms
+
+mitigation: ensure only the owner can call addToWhitelist(address addr):
+
+1. require(isOwner());
+2. if msg.sender != owner revert notTheOwner();
