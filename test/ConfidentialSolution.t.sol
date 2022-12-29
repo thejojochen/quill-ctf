@@ -6,6 +6,7 @@ import "../src/Confidential.sol";
 
 contract ConfidentialSolution is Test {
 
+    //Find the keccak256 hash of aliceHash and bobHash. 
     Confidential public target;
     address public goerliDeployment = 0xf8E9327E38Ceb39B1Ec3D26F5Fad09E426888E66;
     bytes32 public ALICE_DATA = "QWxpY2UK";
