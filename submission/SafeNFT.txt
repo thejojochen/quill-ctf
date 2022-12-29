@@ -1,0 +1,31 @@
+Quill Audit CTF 
+SafeNFT
+
+explanation: 
+
+the following function can make arbritary calls:
+
+function _checkOnERC721Received()
+
+
+steps:
+1. construct contract conforming to IERC721Receiver by implementing onERC721Receive
+2. call buyNFT to set canClaim[msg.sender] = true
+2. onERC721Received calls back into safeNFT contract, claiming multiple times
+3. transfer from attack contract to eoa address
+
+poc (using foundry): https://github.com/thejojochen/quill-ctf
+
+foundry output:
+Running 1 test for test/SafeNFTSolution.t.sol:SafeNFTSolution
+[PASS] testSolve() (gas: 1753990)
+Logs:
+  amount of nfts in attack contract:  0
+  amount of nfts in myAddress:  10
+  leftover funds:  990000000000000000
+  success
+
+Test result: ok. 1 passed; 0 failed; finished in 11.68s
+
+
+

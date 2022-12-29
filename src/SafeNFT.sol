@@ -2,7 +2,7 @@
 
 pragma solidity 0.8.7;
 
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "../lib/openzeppelin-contracts/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 
 contract SafeNFT is ERC721Enumerable {
     uint256 price;
@@ -24,3 +24,4 @@ contract SafeNFT is ERC721Enumerable {
     }
  
 }
+
