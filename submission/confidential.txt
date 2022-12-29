@@ -1,0 +1,23 @@
+Quill Audit CTF 
+Confidential 
+
+
+explanation: 
+
+variables marked 'private' or 'internal' are accessible if their storage slot is known
+
+steps:
+1. create a fork of goerli with the state from the latest block
+2. use foundry's cheatcode 'load' which can load storage from any address at any slot
+3. reconstruct hash and check hash
+
+poc (using foundry): https://github.com/thejojochen/quill-ctf
+
+foundry output:
+Running 1 test for test/ConfidentialSolution.t.sol:ConfidentialSolution
+[PASS] testSolve() (gas: 29168)
+Logs:
+  success
+
+mitigation: do not store confidential data on chain
+
