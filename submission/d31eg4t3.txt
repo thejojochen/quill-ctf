@@ -1,0 +1,26 @@
+Quill Audit CTF 
+D31eg4t3
+
+explanation: 
+
+delegate calls are made in the context of the sender, including storage
+storage changes made in the delegatee contract are published accordingly in the calling contract
+
+steps:
+1. construct attack contract which calls D31eg4t3.hackMe, which makes a callback to the attack contract's mutateStorage() function
+2. modify source contract to more easily query public storage (alternatively, load storage directly)
+3. check to see if the storage has changed as a result of the delegate call
+
+poc (using foundry): https://github.com/thejojochen/quill-ctf
+
+foundry output:
+Running 1 test for test/D31eg4t3.t.sol:D31eg4t3Solution
+[PASS] testSolution() (gas: 71562)
+Logs:
+  new owner:  0x0000000000000000000000000000000000000005
+  true
+  success
+
+mitigation: change require statement to:
+
+ensure any delegate calls are made to trusted contracts*
